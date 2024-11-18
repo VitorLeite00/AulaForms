@@ -5,13 +5,11 @@ const app = express();
 // Porta do servidor
 const PORT = process.env.PORT || 3000;
 
-// Middleware para analisar os dados do formulário
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Lista para armazenar os times cadastrados
 let times = [];
 
-// Rota para exibir o formulário de cadastro
 app.get('/', (req, res) => {
   let listaTimes = times.map(time => `
     <li>${time.nome} - ${time.cidade} - Time do Coração: ${time.timeCoracao}</li>
@@ -31,11 +29,9 @@ app.get('/', (req, res) => {
   `);
 });
 
-// Rota para processar o cadastro do time
 app.post('/cadastro', (req, res) => {
   const { nome, dataNascimento, cidade, timeCoracao } = req.body;
 
-  // Validação dos campos
   let erros = [];
 
   if (!nome) erros.push('Nome é obrigatório.');
@@ -44,7 +40,6 @@ app.post('/cadastro', (req, res) => {
   if (!timeCoracao) erros.push('Time do Coração é obrigatório.');
 
   if (erros.length > 0) {
-    // Exibe os erros e o formulário novamente
     let listaTimes = times.map(time => `
       <li>${time.nome} - ${time.cidade} - Time do Coração: ${time.timeCoracao}</li>
     `).join('');
@@ -62,15 +57,14 @@ app.post('/cadastro', (req, res) => {
       <ul>${listaTimes}</ul>
     `);
   } else {
-    // Adiciona o time à lista
+   
     times.push({ nome, dataNascimento, cidade, timeCoracao });
 
-    // Redireciona de volta ao formulário com a lista atualizada
     res.redirect('/');
   }
 });
 
-// Inicia o servidor
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
